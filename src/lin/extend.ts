@@ -8,6 +8,11 @@ import { get, remove, findIndex, isArray, set } from "lodash";
 
 const param = new Parameter();
 
+/**
+ * 校验扩展
+ * 使用paramter校验参数，不推荐，推荐class-validator校验
+ * @param app app 实例
+ */
 export const validate = (app: Application) => {
   app.context.validate = function(rule: any, data: any) {
     data =
@@ -20,7 +25,6 @@ export const validate = (app: Application) => {
       if (isArray(msg)) {
         msg.map(it => {
           const rl = get(rule, it["field"]);
-          // errors[it["field"]] = [it["message"]];
           errors[it["field"]] = [rl["message"]];
         });
       } else {
@@ -32,7 +36,14 @@ export const validate = (app: Application) => {
   };
 };
 
+/**
+ * 将返回的结果json序列化
+ * @param app app实例
+ */
 export const json = (app: Application) => {
+  /**
+   * hide 表示想要隐藏的属性
+   */
   app.context.json = function(obj: any, hide = []) {
     this.type = "application/json";
     let data = Object.create(null);
@@ -50,7 +61,6 @@ export const json = (app: Application) => {
     } else {
       data = obj;
     }
-    // this.body = JSON.stringify(data);
     this.body = data;
   };
 };
@@ -63,11 +73,14 @@ function transform(obj: any, hide: Array<any>, data: any) {
     });
   }
   fields.forEach(field => {
-    // data[toLine(field)] = obj[field];
     data[toLine(field)] = get(obj, field);
   });
 }
 
+/**
+ * logger扩展
+ * @param app app实例
+ */
 export const logger = (app: Application) => {
   app.context.logger = consola;
 };

@@ -148,12 +148,18 @@ async function parseHeader(ctx: RouterContext, type = TokenType.ACCESS) {
   }
 }
 
+/**
+ * 守卫函数，用户登陆即可访问
+ */
 async function loginRequired(ctx: RouterContext, next: () => Promise<any>) {
   await parseHeader(ctx);
   // tslint:disable-next-line: no-floating-promises
   next();
 }
 
+/**
+ * 守卫函数，用户刷新令牌
+ */
 async function refreshTokenRequired(
   ctx: RouterContext,
   next: () => Promise<any>
@@ -164,6 +170,9 @@ async function refreshTokenRequired(
   next();
 }
 
+/**
+ * 守卫函数，用于权限组鉴权
+ */
 async function groupRequired(ctx: RouterContext, next: () => Promise<any>) {
   await parseHeader(ctx);
   const currentUser = ctx.currentUser;
@@ -197,6 +206,9 @@ async function groupRequired(ctx: RouterContext, next: () => Promise<any>) {
   }
 }
 
+/**
+ * 守卫函数，非超级管理员不可访问
+ */
 async function adminRequired(ctx: RouterContext, next: () => Promise<any>) {
   await parseHeader(ctx);
   const currentUser = ctx.currentUser;

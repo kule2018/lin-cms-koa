@@ -21,6 +21,9 @@ export class Loader {
     this.loadPlugins();
   }
 
+  /**
+   * 加载插件
+   */
   public loadPlugins() {
     Object.keys(this.pluginPath).forEach(item => {
       // item is name of plugin
@@ -37,7 +40,7 @@ export class Loader {
   }
 
   /**
-   * loadPlugin
+   * loadPlugin 加载单个插件
    */
   public loadPlugin(name: string, path: string) {
     const mod = require(path);
@@ -56,7 +59,7 @@ export class Loader {
   }
 
   /**
-   * loadConfig
+   * loadConfig 加载插件配置
    */
   public loadConfig(name: string, path: string, incomingConf: {}) {
     const mod = require(path);

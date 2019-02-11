@@ -11,6 +11,11 @@ import { get, set } from "lodash";
 import { toHump } from "./util";
 import { IRouterContext } from "koa-router";
 
+/**
+ * 判断两个属性是否相等
+ * @param property 属性名
+ * @param validationOptions 校验参数
+ */
 export function EqualFeild(
   property: string,
   validationOptions?: ValidationOptions
@@ -35,6 +40,9 @@ export class EqualFeildConstraint implements ValidatorConstraintInterface {
   }
 }
 
+/**
+ * form基础类
+ */
 export class Form {
   constructor(ctx: IRouterContext) {
     const data = Object.assign(
@@ -48,6 +56,9 @@ export class Form {
     });
   }
 
+  /**
+   * 校验，同步方法
+   */
   public validate() {
     const errors = validateSync(this);
     if (errors.length > 0) {

@@ -7,7 +7,11 @@ export interface Meta {
   module?: string;
   mount?: boolean;
 }
-
+/**
+ * redpint继承自koa-router
+ * 即可使用全部的koa-router api
+ * 也可使用已 red 为前缀的方法，用于视图函数的权限
+ */
 export class Redprint extends Router {
   redOption(
     name: string,

@@ -1,6 +1,9 @@
 import { HttpException, NotFound, MethodNotAllowed } from "./exception";
 import { Context } from "koa";
 
+/**
+ * 全局异常处理中间件
+ */
 export const error = (err: Error, ctx: Context) => {
   ctx.type = "application/json";
   if (err instanceof HttpException) {
@@ -20,6 +23,9 @@ export const error = (err: Error, ctx: Context) => {
   }
 };
 
+/**
+ * 全局日志记录，且判断状态码，发出相应的异常
+ */
 export const log = async (ctx: Context, next: () => Promise<any>) => {
   const start = Date.now();
   try {

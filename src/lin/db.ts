@@ -14,9 +14,6 @@ export class DBManager {
   private username: string = "root";
   private password: string = "123456";
 
-  constructor() {
-    //
-  }
   public async initApp(
     app: Application,
     synchronize?: boolean,
@@ -30,6 +27,7 @@ export class DBManager {
       const port = app.context.config.getItem("db.port", this.port);
       const username = app.context.config.getItem("db.username", this.username);
       const password = app.context.config.getItem("db.password", this.password);
+      // 向entities中加入log模型
       entities.push(Log);
       this.db = await createConnection({
         type,
@@ -51,9 +49,3 @@ export class DBManager {
     }
   }
 }
-
-//     const found = await db.manager.findOne(UserInterface,{ id: 2 })
-//     console.log(typeof(found!.updateTime))
-//     console.log(found!.updateTime)
-//     console.log(found)
-//     db.close()

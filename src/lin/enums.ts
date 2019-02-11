@@ -12,6 +12,9 @@ export enum UserActive {
   NOT_ACTIVE = 2
 }
 
+/**
+ * 令牌的类型
+ */
 export enum TokenType {
   ACCESS = "access",
   REFRESH = "refresh"

@@ -3,7 +3,7 @@ import { assert, findAuthAndModule } from "./util";
 import { get } from "lodash";
 import { UserInterface } from "./interface";
 import { Response, Request } from "koa";
-import { routeMetaInfo, Log } from "./core";
+import { Log } from "./core";
 
 const REG_XP = /(?<=\{)[^}]*(?=\})/g;
 
@@ -11,8 +11,6 @@ export const logger = (template: string) => {
   return async (ctx: IRouterContext, next: () => Promise<any>) => {
     await next();
     // 取数据，写入到日志中
-    const body = ctx.body;
-    const matchedRoute = ctx._matchedRoute;
     writeLog(template, ctx);
   };
 };
@@ -52,7 +50,6 @@ export function parseTemplate(
   reponse: Response,
   request: Request
 ) {
-  // const reg = new RegExp(REG_XP, "_$1");
   const res = REG_XP.exec(template);
   if (res) {
     res.forEach(item => {
