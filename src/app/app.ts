@@ -46,7 +46,7 @@ export async function createApp() {
   app.use(log);
   app.on("error", error);
   const lin = new Lin();
-  await lin.initApp(app, false);
+  await lin.initApp(app, true, true);
   registerRoutes(app);
   await synchronize(app);
   return app;

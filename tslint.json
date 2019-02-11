@@ -5,5 +5,6 @@
     "semicolon": true,
     "space-before-function-paren": false,
     "whitespace": true
-  }
+  },
+  "exclude": ["node_modules"]
 }

@@ -43,7 +43,8 @@
     "tslib": "^1.9.3",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.2.4"
+    "typescript": "^3.2.4",
+    "eslint": "^5.12.1"
   },
   "dependencies": {
     "@koa/cors": "^2.2.3",
@@ -57,7 +58,6 @@
     "lodash": "^4.17.11",
     "mysql2": "^1.6.4",
     "parameter": "^3.5.0",
-    "typeorm": "^0.2.8",
-    "eslint": "^5.12.1"
+    "typeorm": "^0.2.8"
   }
 }

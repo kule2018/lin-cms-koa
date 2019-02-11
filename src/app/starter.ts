@@ -14,4 +14,5 @@ const run = async () => {
 };
 
 // 启动应用
+// tslint:disable-next-line: no-floating-promises
 run();

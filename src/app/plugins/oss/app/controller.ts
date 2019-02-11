@@ -1,6 +1,6 @@
 import Router from "koa-router";
 
-const ossApi = new Router();
+const ossApi = new Router({ prefix: "/oss" });
 
 ossApi.get("/", async ctx => {
   ctx.json({

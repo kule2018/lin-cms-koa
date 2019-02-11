@@ -62,4 +62,5 @@ const start = async () => {
   });
 };
 
+// tslint:disable-next-line: no-floating-promises
 start();

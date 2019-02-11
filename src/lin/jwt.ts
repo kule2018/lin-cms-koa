@@ -150,6 +150,7 @@ async function parseHeader(ctx: RouterContext, type = TokenType.ACCESS) {
 
 async function loginRequired(ctx: RouterContext, next: () => Promise<any>) {
   await parseHeader(ctx);
+  // tslint:disable-next-line: no-floating-promises
   next();
 }
 
@@ -159,6 +160,7 @@ async function refreshTokenRequired(
 ) {
   // 添加access 和 refresh 的标识位
   await parseHeader(ctx, TokenType.REFRESH);
+  // tslint:disable-next-line: no-floating-promises
   next();
 }
 
@@ -173,7 +175,7 @@ async function groupRequired(ctx: RouterContext, next: () => Promise<any>) {
   if (currentUser && currentUser.isSuper) {
     await next();
   } else {
-    const groupId = currentUser!.groupId;
+    const groupId = currentUser.groupId;
     if (!groupId) {
       throw new AuthFailed({
         msg: "您还不属于任何权限组，请联系超级管理员获得权限"
@@ -186,6 +188,7 @@ async function groupRequired(ctx: RouterContext, next: () => Promise<any>) {
       const item = await ctx.manager.authModel.findOne({ auth, module });
       // console.log(item);
       if (item) {
+        // tslint:disable-next-line: no-floating-promises
         next();
       }
     } else {
@@ -198,6 +201,7 @@ async function adminRequired(ctx: RouterContext, next: () => Promise<any>) {
   await parseHeader(ctx);
   const currentUser = ctx.currentUser;
   if (currentUser && currentUser.isSuper) {
+    // tslint:disable-next-line: no-floating-promises
     next();
   } else {
     throw new AuthFailed({ msg: "只有超级管理员可操作" });

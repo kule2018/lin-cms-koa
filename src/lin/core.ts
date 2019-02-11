@@ -1,4 +1,5 @@
 import Application from "koa";
+import { IMiddleware } from "koa-router";
 import { jwt } from "./jwt";
 import { assert } from "./util";
 import { DBManager } from "./db";
@@ -12,6 +13,8 @@ import { json, validate, logger } from "./extend";
 import { NotFound, AuthFailed } from "./exception";
 import { EntitySchema, Entity } from "typeorm";
 import { set, get } from "lodash";
+import { Loader } from "./loader";
+import { Redprint } from "./redprint";
 
 // tslint:disable-next-line:variable-name
 export const __version__ = "0.0.1";
@@ -26,7 +29,8 @@ export class Lin {
 
   public async initApp(
     app: Application,
-    synchronize?: boolean,
+    mount: boolean = true, // 是否挂载插件路由，默认为true
+    synchronize?: boolean, // 是否同步模型到数据库
     userModel?: any,
     groupModel?: any,
     authModel?: any
@@ -44,6 +48,8 @@ export class Lin {
     await this.applyDB(synchronize, userModel, groupModel, authModel);
     // 5. jwt
     this.applyJwt();
+    // 6. 挂载默认路由
+    mount && this.mount();
   }
 
   private applyJwt() {
@@ -55,8 +61,15 @@ export class Lin {
     synchronize?: boolean,
     ...entities: (Function | string | EntitySchema<any>)[]
   ) {
+    const pluginEntities: any[] = [];
+    Object.values(this.manager!.plugins).forEach(plugin => {
+      const models = Object.values(get(plugin, "models"));
+      models.forEach(model => {
+        pluginEntities.push(model);
+      });
+    });
     const db = new DBManager();
-    await db.initApp(this.app!, synchronize, ...entities);
+    await db.initApp(this.app!, synchronize, ...entities, ...pluginEntities);
   }
 
   private applyManager(
@@ -66,7 +79,8 @@ export class Lin {
   ) {
     const manager = new Manager();
     this.manager = manager;
-    manager.initApp(this.app!, userModel, groupModel, authModel);
+    const pluginPath = this.app!.context.config.getItem("pluginPath");
+    manager.initApp(this.app!, userModel, groupModel, authModel, pluginPath);
   }
 
   private applyDefaultExtends() {
@@ -74,27 +88,44 @@ export class Lin {
     validate(this.app!);
     logger(this.app!);
   }
+
+  private mount() {
+    const pluginRp = new Redprint({ prefix: "/plugin" });
+    Object.values(this.manager!.plugins).forEach(plugin => {
+      const controllers = Object.values(get(plugin, "controllers"));
+      controllers.forEach(cont => {
+        pluginRp
+          .use((cont as any).routes() as IMiddleware)
+          .use((cont as any).allowedMethods() as IMiddleware);
+      });
+    });
+    this.app!.use(pluginRp.routes()).use(pluginRp.allowedMethods());
+  }
 }
 
 // 管理插件，数据模型
 export class Manager {
+  public loader: Loader | undefined;
   public userModel: UserInterface | undefined;
   public groupModel: GroupInterface | undefined;
   public authModel: AuthInterface | undefined;
-  constructor() {
-    //
-  }
 
   public initApp(
     app: Application,
     userModel: UserInterface,
     groupModel: GroupInterface,
-    authModel: AuthInterface
+    authModel: AuthInterface,
+    pluginPath: {}
   ) {
     app.context.manager = this;
     this.userModel = userModel;
     this.groupModel = groupModel;
     this.authModel = authModel;
+    this.loader = new Loader(pluginPath, app);
+  }
+
+  public get plugins() {
+    return this.loader!.plugins;
   }
 }
 

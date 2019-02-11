@@ -31,6 +31,7 @@ export class InfoCrud extends BaseEntity {
     // 设置deleteTime为now
     this.deleteTime = new Date();
     // 更新数据库
+    // tslint:disable-next-line: no-floating-promises
     this.save();
   }
 }

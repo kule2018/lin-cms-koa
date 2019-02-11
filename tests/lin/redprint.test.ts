@@ -9,6 +9,7 @@ test("测试红图挂载", () => {
   const rp = new Redprint({ prefix: "test" });
   console.log(routeMetaInfo);
   rp.redGet(
+    "测试红图",
     "/",
     { auth: "打个招呼", module: "看看你咯", mount: true },
     groupRequired,

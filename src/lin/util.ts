@@ -16,6 +16,7 @@ export const isConstructor = (fn: string): boolean => fn === "constructor";
 export const validatePath = (path?: string): string =>
   path ? (path.charAt(0) !== "/" ? "/" + path : path) : "";
 
+// tslint:disable-next-line: strict-type-predicates
 export const isNil = (obj: null): boolean => isUndefined(obj) || obj === null;
 
 export const isEmpty = (array: { length: number }): boolean =>

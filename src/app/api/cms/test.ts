@@ -23,7 +23,7 @@ test.redGet(
   logger("{user.nickname}修改了自己的密码"),
   async ctx => {
     ctx.json({
-      msg: "物质决定意识"
+      msg: "物质决定意识，经济基础决定上层建筑"
     });
   }
 );

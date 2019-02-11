@@ -78,6 +78,7 @@ user.redPut(
       }
     }
     user.email = form.email;
+    // tslint:disable-next-line: no-floating-promises
     user.save();
     ctx.json(new Success({ msg: "操作成功" }));
   }
@@ -94,6 +95,7 @@ user.redPut(
     let user: UserInterface = ctx.currentUser;
     const ok = user.changePassword(form.oldPassword, form.newPassword);
     if (ok as any) {
+      // tslint:disable-next-line: no-floating-promises
       user.save();
       ctx.json(new Success({ msg: "密码修改成功" }));
     } else {
@@ -134,6 +136,7 @@ function registerUser(ctx: IRouterContext, form: RegisterForm) {
   if (form.email && form.email.trim() !== "") {
     user.email = form.email;
   }
+  // tslint:disable-next-line: no-floating-promises
   user.save();
 }
 
