@@ -30,7 +30,12 @@ export class Loader {
       if (get(this.pluginPath, `${item}.enable`)) {
         const path1 = get(this.pluginPath, `${item}.path`);
         const baseDir = process.cwd();
-        const confPath = path.resolve(baseDir, path1, "config.ts");
+        let confPath = "";
+        if (process.env.NODE_ENV === "production") {
+          confPath = path.resolve(baseDir, path1, "config.js");
+        } else {
+          confPath = path.resolve(baseDir, path1, "config.ts");
+        }
         const appPath = path.resolve(baseDir, path1, "app");
         const incomingConf = get(this.pluginPath, item);
         this.loadConfig(item, confPath, incomingConf);

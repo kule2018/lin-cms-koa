@@ -1,14 +1,13 @@
 import Koa from "koa";
 import KoaBodyParser from "koa-bodyparser";
 import cors from "@koa/cors";
-import Config from "../lin/config";
+import { config } from "../lin/config";
 import { Lin } from "../lin/core";
 import { log, error } from "../lin/middleware";
 import { cms } from "./api/cms";
 
 // 1. 必须最开始加载配置，因为其他很多扩展以来于配置
 async function applyConfig(app: Koa) {
-  const config = new Config();
   if (process.env.NODE_ENV === "production") {
     config.getConfigFromFile("dist/app/config/setting.js");
     config.getConfigFromFile("dist/app/config/secure.js");

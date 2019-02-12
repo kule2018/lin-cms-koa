@@ -8,7 +8,7 @@ import {
 } from "class-validator";
 import { ParametersException } from "./exception";
 import { get, set } from "lodash";
-import { toHump } from "./util";
+import { toHump, checkDateFormat } from "./util";
 import { IRouterContext } from "koa-router";
 
 /**
@@ -37,6 +37,17 @@ export class EqualFeildConstraint implements ValidatorConstraintInterface {
     const [relatedPropertyName] = args.constraints;
     const relatedValue = (args.object as any)[relatedPropertyName];
     return value === relatedValue;
+  }
+}
+
+@ValidatorConstraint({ name: "DateFormat", async: false })
+export class DateFormat implements ValidatorConstraintInterface {
+  validate(text: string, args: ValidationArguments) {
+    return checkDateFormat(text);
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return "请输入正确格式的时间";
   }
 }
 

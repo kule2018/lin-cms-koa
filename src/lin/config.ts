@@ -3,7 +3,9 @@ import { merge, get, has, set } from "lodash";
 import Application from "koa";
 
 /**
- * 扩展koa的config类
+ * 挂载到app的context上，你可以通过 ctx.config使用
+ * 配置实例也独立于app应用，这样才可在全局使用配置
+ * 否则每次都要拿到app或者ctx才能访问配置
  *
  * @export
  * @class Config
@@ -17,10 +19,6 @@ export default class Config {
    * @memberof Config
    */
   private store: Object = {};
-
-  constructor() {
-    //
-  }
 
   public initApp(app: Application) {
     app.context.config = this;
@@ -72,3 +70,8 @@ export default class Config {
     this.store = merge(this.store, obj);
   }
 }
+
+/**
+ * 全局的config实例
+ */
+export const config = new Config();

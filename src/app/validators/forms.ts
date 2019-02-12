@@ -5,9 +5,11 @@ import {
   Matches,
   Min,
   IsNotEmpty,
-  IsOptional
+  IsOptional,
+  IsDate,
+  Validate
 } from "class-validator";
-import { EqualFeild, Form } from "../../lin/form";
+import { EqualFeild, Form, DateFormat } from "../../lin/form";
 
 export class RegisterForm extends Form {
   @Length(2, 20, { message: "昵称长度必须在2~10之间" })
@@ -81,4 +83,21 @@ export class ChangePasswordForm extends Form {
 
   @IsNotEmpty({ message: "请输入旧密码" })
   oldPassword!: string;
+}
+
+export class LogFindForm extends Form {
+  @IsOptional()
+  name!: string;
+
+  @Validate(DateFormat, {
+    message: "请输入正确格式开始时间"
+  })
+  @IsNotEmpty({ message: "请输入开始时间" })
+  start!: string;
+
+  @Validate(DateFormat, {
+    message: "请输入正确格式结束时间"
+  })
+  @IsNotEmpty({ message: "请输入结束时间" })
+  end!: string;
 }

@@ -72,11 +72,7 @@ export class Lin {
     await db.initApp(this.app!, synchronize, ...entities, ...pluginEntities);
   }
 
-  private applyManager(
-    userModel: UserInterface,
-    groupModel: GroupInterface,
-    authModel: AuthInterface
-  ) {
+  private applyManager(userModel: any, groupModel: any, authModel: any) {
     const manager = new Manager();
     this.manager = manager;
     const pluginPath = this.app!.context.config.getItem("pluginPath");
@@ -106,15 +102,15 @@ export class Lin {
 // 管理插件，数据模型
 export class Manager {
   public loader: Loader | undefined;
-  public userModel: UserInterface | undefined;
-  public groupModel: GroupInterface | undefined;
-  public authModel: AuthInterface | undefined;
+  public userModel: any;
+  public groupModel: any;
+  public authModel: any;
 
   public initApp(
     app: Application,
-    userModel: UserInterface,
-    groupModel: GroupInterface,
-    authModel: AuthInterface,
+    userModel: any,
+    groupModel: any,
+    authModel: any,
     pluginPath: {}
   ) {
     app.context.manager = this;
@@ -126,6 +122,18 @@ export class Manager {
 
   public get plugins() {
     return this.loader!.plugins;
+  }
+
+  public verify(nickname: string, password: string) {
+    return this.userModel.verify(nickname, password);
+  }
+
+  public findUser(args: {}) {
+    return this.userModel.findOne({ ...args });
+  }
+
+  public findGroup(args: {}) {
+    return this.groupModel.findOne({ ...args });
   }
 }
 
@@ -182,7 +190,6 @@ export class Auth extends AuthInterface {}
 
 export interface LogArgs {
   message?: string;
-  time?: Date;
   userId?: number;
   userName?: string;
   statusCode?: number;
